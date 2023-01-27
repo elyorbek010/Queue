@@ -27,11 +27,20 @@ cqueue_t* queue_create(size_t capacity)
 
 void queue_destroy(cqueue_t* cqueue)
 {
+    if (cqueue == NULL) {
+        fprintf(stderr, "Queue does not exist");
+        return;
+    }
     free(cqueue);
 }
 
 cqueue_ret_t queue_push_end(cqueue_t* cqueue, int element)
 {   
+    if (cqueue == NULL) {
+        fprintf(stderr, "Queue does not exist");
+        return CQUEUE_FAILURE;
+    }
+
     cqueue->element[cqueue->end] = element;
     cqueue->end = queue_next_index(cqueue->end, cqueue->capacity);
 
@@ -43,6 +52,11 @@ cqueue_ret_t queue_push_end(cqueue_t* cqueue, int element)
 }
 
 cqueue_ret_t queue_pop_begin(cqueue_t* cqueue, int* p_element) {
+    if (cqueue == NULL) {
+        fprintf(stderr, "Queue does not exist");
+        return CQUEUE_FAILURE;
+    }
+
     if (cqueue->begin == cqueue->end) {
         return CQUEUE_UNDERFLOW;
     }
@@ -52,7 +66,12 @@ cqueue_ret_t queue_pop_begin(cqueue_t* cqueue, int* p_element) {
     return CQUEUE_SUCCESS;
 }
 
-cqueue_ret_t queue_peek(cqueue_t* cqueue, int* p_element) {
+cqueue_ret_t queue_peek(const cqueue_t* cqueue, int* p_element) {
+    if (cqueue == NULL) {
+        fprintf(stderr, "Queue does not exist");
+        return CQUEUE_FAILURE;
+    }
+
     if (cqueue->begin == cqueue->end) {
         return CQUEUE_UNDERFLOW;
     }
@@ -61,16 +80,10 @@ cqueue_ret_t queue_peek(cqueue_t* cqueue, int* p_element) {
     return CQUEUE_SUCCESS;
 }
 
-bool queue_is_full(cqueue_t* cqueue) {
-    if (queue_next_index(cqueue->end, cqueue->capacity) == cqueue->begin) {
-        return true;
-    }
-    return false;
+bool queue_is_full(const cqueue_t* cqueue) {
+    return queue_next_index(cqueue->end, cqueue->capacity) == cqueue->begin;
 }
 
-bool queue_is_empty(cqueue_t* cqueue) {
-    if (cqueue->begin == cqueue->end) {
-        return true;
-    }
-    return false;
+bool queue_is_empty(const cqueue_t* cqueue) {
+    return cqueue->begin == cqueue->end;
 }

@@ -10,6 +10,7 @@ typedef struct cqueue_s cqueue_t;
 typedef enum cqueue_ret_e
 {
 	CQUEUE_SUCCESS = 0,
+	CQUEUE_FAILURE,
 	CQUEUE_OVERFLOW,
 	CQUEUE_UNDERFLOW
 } cqueue_ret_t;
@@ -40,17 +41,17 @@ cqueue_ret_t queue_pop_begin(cqueue_t* cqueue, int* p_element);
 /**
  * Peeks the first element at the front of the queue.
  */
-cqueue_ret_t queue_peek(cqueue_t* cqueue, int* p_element);
+cqueue_ret_t queue_peek(const cqueue_t* cqueue, int* p_element);
 
 /**
  * Returns true if queue is full, false otherwise
  */
-bool queue_is_full(cqueue_t* cqueue);
+bool queue_is_full(const cqueue_t* cqueue);
 
 /**
  * Returns true if queue is empty, false otherwise
  */
-bool queue_is_empty(cqueue_t* cqueue);
+bool queue_is_empty(const cqueue_t* cqueue);
 
 #endif
 
