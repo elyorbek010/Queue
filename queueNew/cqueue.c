@@ -30,7 +30,7 @@ void queue_destroy(cqueue_t* cqueue)
     free(cqueue);
 }
 
-cqueue_ret_t queue_push_begin(cqueue_t* cqueue, int element)
+cqueue_ret_t queue_push_end(cqueue_t* cqueue, int element)
 {   
     cqueue->element[cqueue->end] = element;
     inc_index(&(cqueue->end), cqueue->capacity);
@@ -42,7 +42,7 @@ cqueue_ret_t queue_push_begin(cqueue_t* cqueue, int element)
     return CQUEUE_SUCCESS;
 }
 
-cqueue_ret_t queue_pop_end(cqueue_t* cqueue, int* p_element) {
+cqueue_ret_t queue_pop_begin(cqueue_t* cqueue, int* p_element) {
     if (cqueue->begin == cqueue->end) {
         return CQUEUE_UNDERFLOW;
     }
@@ -59,4 +59,18 @@ cqueue_ret_t queue_peek(cqueue_t* cqueue, int* p_element) {
 
     *p_element = cqueue->element[cqueue->begin];
     return CQUEUE_SUCCESS;
+}
+
+bool is_full(cqueue_t* cqueue) {
+    if ((cqueue->end + 1) % (cqueue->capacity + 1) == cqueue->begin) {
+        return true;
+    }
+    return false;
+}
+
+bool is_empty(cqueue_t* cqueue) {
+    if (cqueue->begin == cqueue->end) {
+        return true;
+    }
+    return false;
 }
