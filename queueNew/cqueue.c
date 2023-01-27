@@ -48,10 +48,10 @@ cqueue_ret_t queue_push(cqueue_t* cqueue, int element)
     }
     
     cqueue->element[cqueue->end] = element;
-    inc_mod(&(cqueue->end), cqueue->capacity);
+    inc_index(&(cqueue->end), cqueue->capacity);
 
     if (cqueue->begin == cqueue->end) {
-        inc_mod(&(cqueue->begin), cqueue->capacity);
+        inc_index(&(cqueue->begin), cqueue->capacity);
         return CQUEUE_OVERFLOW;
     }
     return CQUEUE_SUCCESS;
@@ -68,7 +68,7 @@ cqueue_ret_t queue_pop(cqueue_t* cqueue, int* p_element) {
     }
 
     *p_element = cqueue->element[cqueue->begin];
-    inc_mod(&(cqueue->begin), cqueue->capacity);
+    inc_index(&(cqueue->begin), cqueue->capacity);
     return CQUEUE_SUCCESS;
 }
 
