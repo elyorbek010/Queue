@@ -40,7 +40,7 @@ void queue_destroy(cqueue_t* cqueue)
     free(cqueue);
 }
 
-cqueue_ret_t queue_push(cqueue_t* cqueue, int element)
+cqueue_ret_t queue_push_begin(cqueue_t* cqueue, int element)
 {
     if (cqueue == NULL) {
         fprintf(stderr, "Queue does not exist");
@@ -57,7 +57,7 @@ cqueue_ret_t queue_push(cqueue_t* cqueue, int element)
     return CQUEUE_SUCCESS;
 }
 
-cqueue_ret_t queue_pop(cqueue_t* cqueue, int* p_element) {
+cqueue_ret_t queue_pop_end(cqueue_t* cqueue, int* p_element) {
     if (cqueue == NULL) {
         fprintf(stderr, "Queue does not exist");
         return CQUEUE_FAILURE;

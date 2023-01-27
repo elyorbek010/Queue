@@ -365,3 +365,4 @@ FodyWeavers.xsd
 /queueNew/queueNew.vcxproj
 /testNew/testNew.vcxproj
 queueNew.sln
+testNew/packages.config
