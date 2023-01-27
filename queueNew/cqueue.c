@@ -14,12 +14,6 @@ struct cqueue_s
 
 cqueue_t* queue_create(size_t capacity)
 {
-    if (capacity == 0)
-    {
-        fprintf(stderr, "Invalid capacity 0");
-        return NULL;
-    }
-
     cqueue_t* cqueue = malloc(sizeof(cqueue_t) + (capacity + 1) * sizeof(int));
     if (cqueue == NULL) {
         fprintf(stderr, "Not enough memory for capacity: %zd", capacity);
@@ -33,20 +27,11 @@ cqueue_t* queue_create(size_t capacity)
 
 void queue_destroy(cqueue_t* cqueue)
 {
-    if (cqueue == NULL) {
-        fprintf(stderr, "Queue does not exist");
-        return;
-    }
     free(cqueue);
 }
 
 cqueue_ret_t queue_push_begin(cqueue_t* cqueue, int element)
-{
-    if (cqueue == NULL) {
-        fprintf(stderr, "Queue does not exist");
-        return CQUEUE_FAILURE;
-    }
-    
+{   
     cqueue->element[cqueue->end] = element;
     inc_index(&(cqueue->end), cqueue->capacity);
 
@@ -58,11 +43,6 @@ cqueue_ret_t queue_push_begin(cqueue_t* cqueue, int element)
 }
 
 cqueue_ret_t queue_pop_end(cqueue_t* cqueue, int* p_element) {
-    if (cqueue == NULL) {
-        fprintf(stderr, "Queue does not exist");
-        return CQUEUE_FAILURE;
-    }
-
     if (cqueue->begin == cqueue->end) {
         return CQUEUE_UNDERFLOW;
     }
@@ -73,11 +53,6 @@ cqueue_ret_t queue_pop_end(cqueue_t* cqueue, int* p_element) {
 }
 
 cqueue_ret_t queue_peek(cqueue_t* cqueue, int* p_element) {
-    if (cqueue == NULL) {
-        fprintf(stderr, "Queue does not exist");
-        return CQUEUE_FAILURE;
-    }
-    
     if (cqueue->begin == cqueue->end) {
         return CQUEUE_UNDERFLOW;
     }

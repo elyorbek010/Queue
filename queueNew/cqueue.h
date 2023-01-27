@@ -9,7 +9,6 @@ typedef struct cqueue_s cqueue_t;
 typedef enum cqueue_ret_e
 {
 	CQUEUE_SUCCESS = 0,
-	CQUEUE_FAILURE,
 	CQUEUE_OVERFLOW,
 	CQUEUE_UNDERFLOW
 } cqueue_ret_t;
