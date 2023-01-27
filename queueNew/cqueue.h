@@ -33,9 +33,17 @@ void queue_destroy(cqueue_t* cqueue);
  * Adds an element to the cqueue.
  *
  * If the cqueue is full, CQUEUE_OVERFLOW is returned
- * and `element` is written in place of the last element.
+ * and `element` is written in place of the first element.
  */
 cqueue_ret_t queue_push_end(cqueue_t* cqueue, int element);
+
+/**
+ * Adds an element to the cqueue.
+ *
+ * If the cqueue is full, CQUEUE_OVERFLOW is returned
+ * and `element` is written in place of the last element.
+ */
+cqueue_ret_t queue_push_begin(cqueue_t* cqueue, int element);
 
 /**
  * Removes an element from the cqueue.
@@ -48,12 +56,12 @@ cqueue_ret_t queue_pop_begin(cqueue_t* cqueue, int* p_element);
 cqueue_ret_t queue_peek(const cqueue_t* cqueue, int* p_element);
 
 /**
- * Returns true if queue is full, false otherwise
+ * Returns CQUEUE_FULL if queue is full, CQUEUE_NOT_FULL otherwise
  */
 cqueue_ret_t queue_is_full(const cqueue_t* cqueue);
 
 /**
- * Returns true if queue is empty, false otherwise
+ * Returns CQUEUE_EMPTY if queue is empty, CQUEUE_NOT_EMPTY otherwise
  */
 cqueue_ret_t queue_is_empty(const cqueue_t* cqueue);
 

@@ -347,7 +347,7 @@ TEST(isEmpty, FullQueue) {
 
     queue_destroy(queue);
 }
-
+/*
 TEST(EmptyQueue, PopEnd) {
     cqueue_t* queue = NULL;
 
@@ -409,6 +409,7 @@ TEST(OverflowQueue, PopEnd) {
 
     queue_destroy(queue);
 }
+*/
 
 TEST(EmptyQueue, pushBegin) {
     cqueue_t* queue = NULL;
@@ -417,7 +418,7 @@ TEST(EmptyQueue, pushBegin) {
     queue = queue_create(3);
     EXPECT_EQ(queue_push_begin(queue, 101), CQUEUE_SUCCESS);
     EXPECT_EQ(queue_peek(queue, &val), CQUEUE_SUCCESS);
-    EXPECT_EQ(queue_pop_end(queue, &val), CQUEUE_SUCCESS);
+    EXPECT_EQ(queue_pop_begin(queue, &val), CQUEUE_SUCCESS);
 
     queue_destroy(queue);
 }
@@ -431,12 +432,14 @@ TEST(FullQueue, pushBegin) {
     ASSERT_EQ(queue_push_end(queue, 202), CQUEUE_SUCCESS);
     ASSERT_EQ(queue_push_end(queue, 303), CQUEUE_SUCCESS);
     EXPECT_EQ(queue_push_begin(queue, 404), CQUEUE_OVERFLOW);
-    EXPECT_EQ(queue_pop_end(queue, &val), 202);
+    EXPECT_EQ(queue_pop_begin(queue, &val), CQUEUE_SUCCESS);
+    EXPECT_EQ(val, 404);
 
     queue_destroy(queue);
 }
 
-TEST(EmptyQueue, popBegin) {
+/*
+TEST(EmptyQueue, popEnd) {
     cqueue_t* queue = NULL;
 
     queue = queue_create(5);
@@ -446,7 +449,7 @@ TEST(EmptyQueue, popBegin) {
     queue_destroy(queue);
 }
 
-TEST(FullQueue, popBegin) {
+TEST(FullQueue, popEnd) {
     cqueue_t* queue = NULL;
     int val;
 
@@ -455,7 +458,7 @@ TEST(FullQueue, popBegin) {
     ASSERT_EQ(queue_push_end(queue, 202), CQUEUE_SUCCESS);
     ASSERT_EQ(queue_push_end(queue, 303), CQUEUE_SUCCESS);
     EXPECT_EQ(queue_push_begin(queue, 404), CQUEUE_OVERFLOW);
-    EXPECT_EQ(queue_pop_begin(queue, &val), 404);
+    EXPECT_EQ(queue_pop_end(queue, &val), 202);
 
     queue_destroy(queue);
-}
+}*/

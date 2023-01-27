@@ -1,7 +1,16 @@
 #include "cqueue.h"
-
+//wrap fprintf messages into MACROS
 static inline size_t queue_next_index(const size_t index, const size_t capacity) {
     return (index + 1) % (capacity + 1);
+}
+
+static inline size_t queue_prev_index(const size_t index, const size_t capacity) {
+    if (index == 0) {
+        return capacity;
+    }
+    else {
+        return index - 1;
+    }
 }
 
 struct cqueue_s
@@ -46,6 +55,22 @@ cqueue_ret_t queue_push_end(cqueue_t* cqueue, int element)
 
     if (cqueue->begin == cqueue->end) {
         cqueue->begin = queue_next_index(cqueue->begin, cqueue->capacity);
+        return CQUEUE_OVERFLOW;
+    }
+    return CQUEUE_SUCCESS;
+}
+
+cqueue_ret_t queue_push_begin(cqueue_t* cqueue, int element) {
+    if (cqueue == NULL) {
+        fprintf(stderr, "Queue does not exist");
+        return CQUEUE_FAILURE;
+    }
+
+    cqueue->begin = queue_prev_index(cqueue->begin, cqueue->capacity);
+    cqueue->element[cqueue->begin] = element;
+
+    if (cqueue->begin == cqueue->end) {
+        cqueue->end = queue_prev_index(cqueue->end, cqueue->capacity);
         return CQUEUE_OVERFLOW;
     }
     return CQUEUE_SUCCESS;
