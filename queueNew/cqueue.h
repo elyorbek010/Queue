@@ -12,7 +12,11 @@ typedef enum cqueue_ret_e
 	CQUEUE_SUCCESS = 0,
 	CQUEUE_FAILURE,
 	CQUEUE_OVERFLOW,
-	CQUEUE_UNDERFLOW
+	CQUEUE_UNDERFLOW,
+	CQUEUE_EMPTY,
+	CQUEUE_NOT_EMPTY,
+	CQUEUE_FULL,
+	CQUEUE_NOT_FULL
 } cqueue_ret_t;
 
 /**
@@ -46,12 +50,12 @@ cqueue_ret_t queue_peek(const cqueue_t* cqueue, int* p_element);
 /**
  * Returns true if queue is full, false otherwise
  */
-bool queue_is_full(const cqueue_t* cqueue);
+cqueue_ret_t queue_is_full(const cqueue_t* cqueue);
 
 /**
  * Returns true if queue is empty, false otherwise
  */
-bool queue_is_empty(const cqueue_t* cqueue);
+cqueue_ret_t queue_is_empty(const cqueue_t* cqueue);
 
 #endif
 

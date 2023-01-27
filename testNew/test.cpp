@@ -226,7 +226,7 @@ TEST(isFull, EmptyQueueCapacity1) {
     cqueue_t* queue = NULL;
 
     queue = queue_create(1);
-    EXPECT_EQ(queue_is_full(queue), false);
+    EXPECT_EQ(queue_is_full(queue), CQUEUE_NOT_FULL);
 
     queue_destroy(queue);
 }
@@ -238,9 +238,9 @@ TEST(isFull, FullQueueCapacity1) {
     queue = queue_create(1);
 
     ASSERT_EQ(queue_push_end(queue, 101), CQUEUE_SUCCESS);
-    EXPECT_EQ(queue_is_full(queue), true);
+    EXPECT_EQ(queue_is_full(queue), CQUEUE_FULL);
     ASSERT_EQ(queue_pop_begin(queue, &var), CQUEUE_SUCCESS);
-    EXPECT_EQ(queue_is_full(queue), false);
+    EXPECT_EQ(queue_is_full(queue), CQUEUE_NOT_FULL);
 
     queue_destroy(queue);
 }
@@ -250,7 +250,7 @@ TEST(isFull, EmptyQueue) {
 
     queue = queue_create(5);
 
-    EXPECT_EQ(queue_is_full(queue), false);
+    EXPECT_EQ(queue_is_full(queue), CQUEUE_NOT_FULL);
 
     queue_destroy(queue);
 }
@@ -264,7 +264,7 @@ TEST(isFull, HalfFullQueue) {
     ASSERT_EQ(queue_push_end(queue, 202), CQUEUE_SUCCESS);
     ASSERT_EQ(queue_push_end(queue, 303), CQUEUE_SUCCESS);
 
-    EXPECT_EQ(queue_is_full(queue), false);
+    EXPECT_EQ(queue_is_full(queue), CQUEUE_NOT_FULL);
 
     queue_destroy(queue);
 }
@@ -280,7 +280,7 @@ TEST(isFull, FullQueue) {
     ASSERT_EQ(queue_push_end(queue, 404), CQUEUE_SUCCESS);
     ASSERT_EQ(queue_push_end(queue, 505), CQUEUE_SUCCESS);
 
-    EXPECT_EQ(queue_is_full(queue), true);
+    EXPECT_EQ(queue_is_full(queue), CQUEUE_FULL);
 
     queue_destroy(queue);
 }
@@ -289,7 +289,7 @@ TEST(isEmpty, EmptyQueueCapacity1) {
     cqueue_t* queue = NULL;
 
     queue = queue_create(1);
-    EXPECT_EQ(queue_is_empty(queue), true);
+    EXPECT_EQ(queue_is_empty(queue), CQUEUE_EMPTY);
 
     queue_destroy(queue);
 }
@@ -301,9 +301,9 @@ TEST(isEmpty, FullQueueCapacity1) {
     queue = queue_create(1);
 
     ASSERT_EQ(queue_push_end(queue, 101), CQUEUE_SUCCESS);
-    EXPECT_EQ(queue_is_empty(queue), false);
+    EXPECT_EQ(queue_is_empty(queue), CQUEUE_NOT_EMPTY);
     ASSERT_EQ(queue_pop_begin(queue, &var), CQUEUE_SUCCESS);
-    EXPECT_EQ(queue_is_empty(queue), true);
+    EXPECT_EQ(queue_is_empty(queue), CQUEUE_EMPTY);
 
     queue_destroy(queue);
 }
@@ -313,7 +313,7 @@ TEST(isEmpty, EmptyQueue) {
 
     queue = queue_create(5);
 
-    EXPECT_EQ(queue_is_empty(queue), true);
+    EXPECT_EQ(queue_is_empty(queue), CQUEUE_EMPTY);
 
     queue_destroy(queue);
 }
@@ -327,7 +327,7 @@ TEST(isEmpty, HalfFullQueue) {
     ASSERT_EQ(queue_push_end(queue, 202), CQUEUE_SUCCESS);
     ASSERT_EQ(queue_push_end(queue, 303), CQUEUE_SUCCESS);
 
-    EXPECT_EQ(queue_is_empty(queue), false);
+    EXPECT_EQ(queue_is_empty(queue), CQUEUE_NOT_EMPTY);
 
     queue_destroy(queue);
 }
@@ -343,7 +343,7 @@ TEST(isEmpty, FullQueue) {
     ASSERT_EQ(queue_push_end(queue, 404), CQUEUE_SUCCESS);
     ASSERT_EQ(queue_push_end(queue, 505), CQUEUE_SUCCESS);
 
-    EXPECT_EQ(queue_is_empty(queue), false);
+    EXPECT_EQ(queue_is_empty(queue), CQUEUE_NOT_EMPTY);
 
     queue_destroy(queue);
 }

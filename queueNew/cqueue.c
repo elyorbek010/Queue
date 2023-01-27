@@ -1,6 +1,6 @@
 #include "cqueue.h"
 
-static inline size_t queue_next_index(size_t index, size_t capacity) {
+static inline size_t queue_next_index(const size_t index, const size_t capacity) {
     return (index + 1) % (capacity + 1);
 }
 
@@ -12,7 +12,7 @@ struct cqueue_s
     int element[];
 };
 
-cqueue_t* queue_create(size_t capacity)
+cqueue_t* queue_create(const size_t capacity)
 {
     cqueue_t* cqueue = malloc(sizeof(*cqueue) + (capacity + 1) * sizeof(cqueue->element[0]));
     if (cqueue == NULL) {
@@ -52,8 +52,8 @@ cqueue_ret_t queue_push_end(cqueue_t* cqueue, int element)
 }
 
 cqueue_ret_t queue_pop_begin(cqueue_t* cqueue, int* p_element) {
-    if (cqueue == NULL) {
-        fprintf(stderr, "Queue does not exist");
+    if (cqueue == NULL || p_element == NULL) {
+        fprintf(stderr, "argument is null");
         return CQUEUE_FAILURE;
     }
 
@@ -67,8 +67,8 @@ cqueue_ret_t queue_pop_begin(cqueue_t* cqueue, int* p_element) {
 }
 
 cqueue_ret_t queue_peek(const cqueue_t* cqueue, int* p_element) {
-    if (cqueue == NULL) {
-        fprintf(stderr, "Queue does not exist");
+    if (cqueue == NULL || p_element == NULL) {
+        fprintf(stderr, "argument is null");
         return CQUEUE_FAILURE;
     }
 
@@ -80,10 +80,20 @@ cqueue_ret_t queue_peek(const cqueue_t* cqueue, int* p_element) {
     return CQUEUE_SUCCESS;
 }
 
-bool queue_is_full(const cqueue_t* cqueue) {
-    return queue_next_index(cqueue->end, cqueue->capacity) == cqueue->begin;
+cqueue_ret_t queue_is_full(const cqueue_t* cqueue) {
+    if (cqueue == NULL) {
+        fprintf(stderr, "Queue does not exist");
+        return CQUEUE_FAILURE;
+    }
+
+    return queue_next_index(cqueue->end, cqueue->capacity) == cqueue->begin ? CQUEUE_FULL : CQUEUE_NOT_FULL;
 }
 
-bool queue_is_empty(const cqueue_t* cqueue) {
-    return cqueue->begin == cqueue->end;
+cqueue_ret_t queue_is_empty(const cqueue_t* cqueue) {
+    if (cqueue == NULL) {
+        fprintf(stderr, "Queue does not exist");
+        return CQUEUE_FAILURE;
+    }
+
+    return cqueue->begin == cqueue->end ? CQUEUE_EMPTY : CQUEUE_NOT_EMPTY;
 }
