@@ -45,12 +45,12 @@ cqueue_ret_t queue_peek(cqueue_t* cqueue, int* p_element);
 /**
  * Returns true if queue is full, false otherwise
  */
-bool is_full(cqueue_t* cqueue);
+bool queue_is_full(cqueue_t* cqueue);
 
 /**
  * Returns true if queue is empty, false otherwise
  */
-bool is_empty(cqueue_t* cqueue);
+bool queue_is_empty(cqueue_t* cqueue);
 
 #endif
 

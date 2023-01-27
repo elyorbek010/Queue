@@ -1,7 +1,7 @@
 #include "cqueue.h"
 
-static inline void inc_index(size_t* index, size_t capacity) {
-    *index = (*index + 1) % (capacity + 1);
+static inline size_t queue_next_index(size_t index, size_t capacity) {
+    return (index + 1) % (capacity + 1);
 }
 
 struct cqueue_s
@@ -14,7 +14,7 @@ struct cqueue_s
 
 cqueue_t* queue_create(size_t capacity)
 {
-    cqueue_t* cqueue = malloc(sizeof(cqueue_t) + (capacity + 1) * sizeof(int));
+    cqueue_t* cqueue = malloc(sizeof(*cqueue) + (capacity + 1) * sizeof(cqueue->element[0]));
     if (cqueue == NULL) {
         fprintf(stderr, "Not enough memory for capacity: %zd", capacity);
         return NULL;
@@ -33,10 +33,10 @@ void queue_destroy(cqueue_t* cqueue)
 cqueue_ret_t queue_push_end(cqueue_t* cqueue, int element)
 {   
     cqueue->element[cqueue->end] = element;
-    inc_index(&(cqueue->end), cqueue->capacity);
+    cqueue->end = queue_next_index(cqueue->end, cqueue->capacity);
 
     if (cqueue->begin == cqueue->end) {
-        inc_index(&(cqueue->begin), cqueue->capacity);
+        cqueue->begin = queue_next_index(cqueue->begin, cqueue->capacity);
         return CQUEUE_OVERFLOW;
     }
     return CQUEUE_SUCCESS;
@@ -48,7 +48,7 @@ cqueue_ret_t queue_pop_begin(cqueue_t* cqueue, int* p_element) {
     }
 
     *p_element = cqueue->element[cqueue->begin];
-    inc_index(&(cqueue->begin), cqueue->capacity);
+    cqueue->begin = queue_next_index(cqueue->begin, cqueue->capacity);
     return CQUEUE_SUCCESS;
 }
 
@@ -61,14 +61,14 @@ cqueue_ret_t queue_peek(cqueue_t* cqueue, int* p_element) {
     return CQUEUE_SUCCESS;
 }
 
-bool is_full(cqueue_t* cqueue) {
-    if ((cqueue->end + 1) % (cqueue->capacity + 1) == cqueue->begin) {
+bool queue_is_full(cqueue_t* cqueue) {
+    if (queue_next_index(cqueue->end, cqueue->capacity) == cqueue->begin) {
         return true;
     }
     return false;
 }
 
-bool is_empty(cqueue_t* cqueue) {
+bool queue_is_empty(cqueue_t* cqueue) {
     if (cqueue->begin == cqueue->end) {
         return true;
     }
