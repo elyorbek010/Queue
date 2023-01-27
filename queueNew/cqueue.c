@@ -91,6 +91,21 @@ cqueue_ret_t queue_pop_begin(cqueue_t* cqueue, int* p_element) {
     return CQUEUE_SUCCESS;
 }
 
+cqueue_ret_t queue_pop_end(cqueue_t* cqueue, int* p_element) {
+    if (cqueue == NULL || p_element == NULL) {
+        fprintf(stderr, "argument is null");
+        return CQUEUE_FAILURE;
+    }
+
+    if (cqueue->begin == cqueue->end) {
+        return CQUEUE_UNDERFLOW;
+    }
+
+    cqueue->end = queue_prev_index(cqueue->end, cqueue->capacity);
+    *p_element = cqueue->element[cqueue->end];
+    return CQUEUE_SUCCESS;
+}
+
 cqueue_ret_t queue_peek(const cqueue_t* cqueue, int* p_element) {
     if (cqueue == NULL || p_element == NULL) {
         fprintf(stderr, "argument is null");

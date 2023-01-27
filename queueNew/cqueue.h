@@ -51,6 +51,11 @@ cqueue_ret_t queue_push_begin(cqueue_t* cqueue, int element);
 cqueue_ret_t queue_pop_begin(cqueue_t* cqueue, int* p_element);
 
 /**
+ * Removes an element from the cqueue.
+ */
+cqueue_ret_t queue_pop_end(cqueue_t* cqueue, int* p_element);
+
+/**
  * Peeks the first element at the front of the queue.
  */
 cqueue_ret_t queue_peek(const cqueue_t* cqueue, int* p_element);
