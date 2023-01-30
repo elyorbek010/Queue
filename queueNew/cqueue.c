@@ -18,7 +18,7 @@ struct cqueue_s
     size_t capacity;
     size_t begin;
     size_t end;
-    int element[];
+    void *element[];
 };
 
 cqueue_t* queue_create(const size_t capacity)
@@ -34,16 +34,16 @@ cqueue_t* queue_create(const size_t capacity)
     return cqueue;
 }
 
-void queue_destroy(cqueue_t* cqueue)
+cqueue_ret_t queue_destroy(cqueue_t* cqueue)
 {
     if (cqueue == NULL) {
         fprintf(stderr, "Queue does not exist");
-        return;
+        return CQUEUE_FAILURE;
     }
     free(cqueue);
 }
 
-cqueue_ret_t queue_push_end(cqueue_t* cqueue, int element)
+cqueue_ret_t queue_push_end(cqueue_t* cqueue, void* element)
 {   
     if (cqueue == NULL) {
         fprintf(stderr, "Queue does not exist");
@@ -60,7 +60,7 @@ cqueue_ret_t queue_push_end(cqueue_t* cqueue, int element)
     return CQUEUE_SUCCESS;
 }
 
-cqueue_ret_t queue_push_begin(cqueue_t* cqueue, int element) {
+cqueue_ret_t queue_push_begin(cqueue_t* cqueue, void* element) {
     if (cqueue == NULL) {
         fprintf(stderr, "Queue does not exist");
         return CQUEUE_FAILURE;
@@ -76,8 +76,8 @@ cqueue_ret_t queue_push_begin(cqueue_t* cqueue, int element) {
     return CQUEUE_SUCCESS;
 }
 
-cqueue_ret_t queue_pop_begin(cqueue_t* cqueue, int* p_element) {
-    if (cqueue == NULL || p_element == NULL) {
+cqueue_ret_t queue_pop_begin(cqueue_t* cqueue, void** p_element) {
+    if (cqueue == NULL) {
         fprintf(stderr, "argument is null");
         return CQUEUE_FAILURE;
     }
@@ -91,8 +91,8 @@ cqueue_ret_t queue_pop_begin(cqueue_t* cqueue, int* p_element) {
     return CQUEUE_SUCCESS;
 }
 
-cqueue_ret_t queue_pop_end(cqueue_t* cqueue, int* p_element) {
-    if (cqueue == NULL || p_element == NULL) {
+cqueue_ret_t queue_pop_end(cqueue_t* cqueue, void** p_element) {
+    if (cqueue == NULL) {
         fprintf(stderr, "argument is null");
         return CQUEUE_FAILURE;
     }
@@ -106,8 +106,8 @@ cqueue_ret_t queue_pop_end(cqueue_t* cqueue, int* p_element) {
     return CQUEUE_SUCCESS;
 }
 
-cqueue_ret_t queue_peek(const cqueue_t* cqueue, int* p_element) {
-    if (cqueue == NULL || p_element == NULL) {
+cqueue_ret_t queue_peek_begin(const cqueue_t* cqueue, void** p_element) {
+    if (cqueue == NULL) {
         fprintf(stderr, "argument is null");
         return CQUEUE_FAILURE;
     }
@@ -117,6 +117,20 @@ cqueue_ret_t queue_peek(const cqueue_t* cqueue, int* p_element) {
     }
 
     *p_element = cqueue->element[cqueue->begin];
+    return CQUEUE_SUCCESS;
+}
+
+cqueue_ret_t queue_peek_end(const cqueue_t* cqueue, void** p_element) {
+    if (cqueue == NULL) {
+        fprintf(stderr, "argument is null");
+        return CQUEUE_FAILURE;
+    }
+
+    if (cqueue->begin == cqueue->end) {
+        return CQUEUE_UNDERFLOW;
+    }
+
+    *p_element = cqueue->element[queue_prev_index(cqueue->end, cqueue->capacity)];
     return CQUEUE_SUCCESS;
 }
 
