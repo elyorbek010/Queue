@@ -154,7 +154,7 @@ cqueue_ret_t queue_peek_end(const cqueue_t* cqueue, void** p_element) {
     return CQUEUE_SUCCESS;
 }
 
-cqueue_ret_t queue_is_full(const cqueue_t* cqueue) {
+cqueue_ret_t queue_status(const cqueue_t* cqueue) {
     if (cqueue == NULL) {
         #if (DEBUG == 1)
             debug_print("Queue does not exist\n");
@@ -162,16 +162,13 @@ cqueue_ret_t queue_is_full(const cqueue_t* cqueue) {
         return CQUEUE_FAILURE;
     }
 
-    return queue_next_index(cqueue->end, cqueue->capacity) == cqueue->begin ? CQUEUE_FULL : CQUEUE_NOT_FULL;
-}
-
-cqueue_ret_t queue_is_empty(const cqueue_t* cqueue) {
-    if (cqueue == NULL) {
-        #if (DEBUG == 1)
-            debug_print("Queue does not exist\n");
-        #endif
-        return CQUEUE_FAILURE;
+    if (queue_next_index(cqueue->end, cqueue->capacity) == cqueue->begin) {
+        return CQUEUE_FULL;
     }
-
-    return cqueue->begin == cqueue->end ? CQUEUE_EMPTY : CQUEUE_NOT_EMPTY;
+    else if (cqueue->begin == cqueue->end) {
+        return CQUEUE_EMPTY;
+    }
+    else {
+        return CQUEUE_NONEMPTY;
+    }
 }

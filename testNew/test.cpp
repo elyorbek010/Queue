@@ -19,8 +19,8 @@ TEST(NullArguments, allFunctions) {
     EXPECT_EQ(queue_pop_begin(nullptr, &ptr), CQUEUE_FAILURE);
     EXPECT_EQ(queue_pop_end(nullptr, &ptr), CQUEUE_FAILURE);
     EXPECT_EQ(queue_peek_begin(nullptr, &ptr), CQUEUE_FAILURE);
-    EXPECT_EQ(queue_is_full(nullptr), CQUEUE_FAILURE);
-    EXPECT_EQ(queue_is_empty(nullptr), CQUEUE_FAILURE);
+    EXPECT_EQ(queue_status(nullptr), CQUEUE_FAILURE);
+    EXPECT_EQ(queue_status(nullptr), CQUEUE_FAILURE);
 
     queue_destroy(queue);
 }
@@ -260,7 +260,7 @@ TEST(isFull, EmptyQueueCapacity1) {
     cqueue_t* queue = nullptr;
 
     queue = queue_create(1);
-    EXPECT_EQ(queue_is_full(queue), CQUEUE_NOT_FULL);
+    EXPECT_EQ(queue_status(queue), CQUEUE_EMPTY);
 
     queue_destroy(queue);
 }
@@ -273,9 +273,9 @@ TEST(isFull, FullQueueCapacity1) {
     queue = queue_create(1);
 
     ASSERT_EQ(queue_push_end(queue, &var), CQUEUE_SUCCESS);
-    EXPECT_EQ(queue_is_full(queue), CQUEUE_FULL);
+    EXPECT_EQ(queue_status(queue), CQUEUE_FULL);
     ASSERT_EQ(queue_pop_begin(queue, &ptr), CQUEUE_SUCCESS);
-    EXPECT_EQ(queue_is_full(queue), CQUEUE_NOT_FULL);
+    EXPECT_EQ(queue_status(queue), CQUEUE_EMPTY);
 
     queue_destroy(queue);
 }
@@ -285,7 +285,7 @@ TEST(isFull, EmptyQueue) {
 
     queue = queue_create(5);
 
-    EXPECT_EQ(queue_is_full(queue), CQUEUE_NOT_FULL);
+    EXPECT_EQ(queue_status(queue), CQUEUE_EMPTY);
 
     queue_destroy(queue);
 }
@@ -300,7 +300,7 @@ TEST(isFull, HalfFullQueue) {
     ASSERT_EQ(queue_push_end(queue, &val + 1), CQUEUE_SUCCESS);
     ASSERT_EQ(queue_push_end(queue, &val + 2), CQUEUE_SUCCESS);
 
-    EXPECT_EQ(queue_is_full(queue), CQUEUE_NOT_FULL);
+    EXPECT_EQ(queue_status(queue), CQUEUE_NONEMPTY);
 
     queue_destroy(queue);
 }
@@ -317,7 +317,7 @@ TEST(isFull, FullQueue) {
     ASSERT_EQ(queue_push_end(queue, &ch + 3), CQUEUE_SUCCESS);
     ASSERT_EQ(queue_push_end(queue, &ch + 4), CQUEUE_SUCCESS);
 
-    EXPECT_EQ(queue_is_full(queue), CQUEUE_FULL);
+    EXPECT_EQ(queue_status(queue), CQUEUE_FULL);
 
     queue_destroy(queue);
 }
@@ -326,7 +326,7 @@ TEST(isEmpty, EmptyQueueCapacity1) {
     cqueue_t* queue = nullptr;
 
     queue = queue_create(1);
-    EXPECT_EQ(queue_is_empty(queue), CQUEUE_EMPTY);
+    EXPECT_EQ(queue_status(queue), CQUEUE_EMPTY);
 
     queue_destroy(queue);
 }
@@ -339,9 +339,9 @@ TEST(isEmpty, FullQueueCapacity1) {
     queue = queue_create(1);
 
     ASSERT_EQ(queue_push_end(queue, &var), CQUEUE_SUCCESS);
-    EXPECT_EQ(queue_is_empty(queue), CQUEUE_NOT_EMPTY);
+    EXPECT_EQ(queue_status(queue), CQUEUE_FULL);
     ASSERT_EQ(queue_pop_begin(queue, &ptr), CQUEUE_SUCCESS);
-    EXPECT_EQ(queue_is_empty(queue), CQUEUE_EMPTY);
+    EXPECT_EQ(queue_status(queue), CQUEUE_EMPTY);
 
     queue_destroy(queue);
 }
@@ -351,7 +351,7 @@ TEST(isEmpty, EmptyQueue) {
 
     queue = queue_create(5);
 
-    EXPECT_EQ(queue_is_empty(queue), CQUEUE_EMPTY);
+    EXPECT_EQ(queue_status(queue), CQUEUE_EMPTY);
 
     queue_destroy(queue);
 }
@@ -366,7 +366,7 @@ TEST(isEmpty, HalfFullQueue) {
     ASSERT_EQ(queue_push_end(queue, &val + 1), CQUEUE_SUCCESS);
     ASSERT_EQ(queue_push_end(queue, &val + 2), CQUEUE_SUCCESS);
 
-    EXPECT_EQ(queue_is_empty(queue), CQUEUE_NOT_EMPTY);
+    EXPECT_EQ(queue_status(queue), CQUEUE_NONEMPTY);
 
     queue_destroy(queue);
 }
@@ -383,7 +383,7 @@ TEST(isEmpty, FullQueue) {
     ASSERT_EQ(queue_push_end(queue, &val + 3), CQUEUE_SUCCESS);
     ASSERT_EQ(queue_push_end(queue, &val + 4), CQUEUE_SUCCESS);
 
-    EXPECT_EQ(queue_is_empty(queue), CQUEUE_NOT_EMPTY);
+    EXPECT_EQ(queue_status(queue), CQUEUE_FULL);
 
     queue_destroy(queue);
 }
@@ -499,6 +499,25 @@ TEST(FullQueue, popEnd) {
     EXPECT_EQ(queue_push_begin(queue, &val + 3), CQUEUE_OVERFLOW);
     EXPECT_EQ(queue_pop_end(queue, &ptr), CQUEUE_SUCCESS);
     EXPECT_EQ(&val + 1, (int *) ptr);
+
+    queue_destroy(queue);
+}
+
+TEST(PeekBeginPeekEnd, pushBeginPushEnd) {
+    cqueue_t* queue = nullptr;
+    int val = 101;
+    void* ptr;
+
+    queue = queue_create(3);
+
+    ASSERT_EQ(queue_push_end(queue, &val + 0), CQUEUE_SUCCESS);
+    ASSERT_EQ(queue_push_begin(queue, &val + 1), CQUEUE_SUCCESS);
+
+    EXPECT_EQ(queue_peek_end(queue, &ptr), CQUEUE_SUCCESS);
+    EXPECT_EQ(&val + 0, ptr);
+
+    EXPECT_EQ(queue_peek_begin(queue, &ptr), CQUEUE_SUCCESS);
+    EXPECT_EQ(&val + 1, ptr);
 
     queue_destroy(queue);
 }

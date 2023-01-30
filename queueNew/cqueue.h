@@ -10,13 +10,12 @@ typedef struct cqueue_s cqueue_t;
 typedef enum cqueue_ret_e
 {
 	CQUEUE_SUCCESS = 0,
-	CQUEUE_FAILURE,
+	CQUEUE_FAILURE = 1,
 	CQUEUE_OVERFLOW,
 	CQUEUE_UNDERFLOW,
 	CQUEUE_EMPTY,
-	CQUEUE_NOT_EMPTY,
 	CQUEUE_FULL,
-	CQUEUE_NOT_FULL
+	CQUEUE_NONEMPTY
 } cqueue_ret_t;
 
 /**
@@ -68,12 +67,7 @@ cqueue_ret_t queue_peek_end(const cqueue_t* cqueue, void** p_element);
 /**
  * Returns CQUEUE_FULL if queue is full, CQUEUE_NOT_FULL otherwise
  */
-cqueue_ret_t queue_is_full(const cqueue_t* cqueue);
-
-/**
- * Returns CQUEUE_EMPTY if queue is empty, CQUEUE_NOT_EMPTY otherwise
- */
-cqueue_ret_t queue_is_empty(const cqueue_t* cqueue);
+cqueue_ret_t queue_status(const cqueue_t* cqueue);
 
 #endif
 
