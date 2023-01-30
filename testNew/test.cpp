@@ -6,34 +6,36 @@ extern "C" {
 
 
 TEST(NullArguments, allFunctions) {
-    cqueue_t* queue = queue_create(5);
-    int val = 0;
-    int* ptr;
+    cqueue_t* queue;
+    
+    queue = queue_create(5);
 
-    EXPECT_EQ(queue_create(0), CQUEUE_FAILURE);
-    EXPECT_EQ(queue_destroy(NULL), CQUEUE_FAILURE);
-    EXPECT_EQ(queue_push_end(NULL, &val), CQUEUE_FAILURE);
-    EXPECT_EQ(queue_push_begin(NULL, &val), CQUEUE_FAILURE);
-    EXPECT_EQ(queue_pop_begin(NULL, &ptr), CQUEUE_FAILURE);
-    EXPECT_EQ(queue_pop_end(NULL, &ptr), CQUEUE_FAILURE);
-    EXPECT_EQ(queue_peek(NULL, &ptr), CQUEUE_FAILURE);
-    EXPECT_EQ(queue_is_full(NULL), CQUEUE_FAILURE);
-    EXPECT_EQ(queue_is_empty(NULL), CQUEUE_FAILURE);
+    int val = 0;
+    void * ptr;
+
+    EXPECT_EQ(queue_destroy(nullptr), CQUEUE_FAILURE);
+    EXPECT_EQ(queue_push_end(nullptr, &val), CQUEUE_FAILURE);
+    EXPECT_EQ(queue_push_begin(nullptr, &val), CQUEUE_FAILURE);
+    EXPECT_EQ(queue_pop_begin(nullptr, &ptr), CQUEUE_FAILURE);
+    EXPECT_EQ(queue_pop_end(nullptr, &ptr), CQUEUE_FAILURE);
+    EXPECT_EQ(queue_peek_begin(nullptr, &ptr), CQUEUE_FAILURE);
+    EXPECT_EQ(queue_is_full(nullptr), CQUEUE_FAILURE);
+    EXPECT_EQ(queue_is_empty(nullptr), CQUEUE_FAILURE);
 
     queue_destroy(queue);
 }
 
 TEST(SmokeTest, pushPeekPop)
 {
-    cqueue_t* queue = NULL;
+    cqueue_t* queue = nullptr;
 
     int var1 = 10;
-    int* var2;
+    void* var2;
 
     queue = queue_create(5);
 
     EXPECT_EQ(queue_push_end(queue, &var1), CQUEUE_SUCCESS);
-    EXPECT_EQ(queue_peek(queue, &var2), CQUEUE_SUCCESS);
+    EXPECT_EQ(queue_peek_begin(queue, &var2), CQUEUE_SUCCESS);
 
     EXPECT_EQ(&var1, var2);
     var2 = NULL;
@@ -47,9 +49,8 @@ TEST(SmokeTest, pushPeekPop)
 TEST(FullQueue, pushReturnsOverflow)
 {
     double var1 = 1;
-    double* var2;
 
-    cqueue_t* queue = NULL;
+    cqueue_t* queue = nullptr;
 
     queue = queue_create(3);
 
@@ -64,9 +65,9 @@ TEST(FullQueue, pushReturnsOverflow)
 
 TEST(FullQueue, pushOverwritesAtFront)
 {
-    cqueue_t* queue = NULL;
+    cqueue_t* queue = nullptr;
     float var1 = 5;
-    float* var2;
+    void* var2;
 
     queue = queue_create(3);
 
@@ -86,34 +87,34 @@ TEST(FullQueue, pushOverwritesAtFront)
 
 TEST(EmptyQueue, popReturnsUnderflow)
 {
-    cqueue_t* queue = NULL;
-    int val = 101;
+    cqueue_t* queue = nullptr;
+    void* ptr;
 
     queue = queue_create(3);
 
-    EXPECT_EQ(queue_pop_begin(queue, &val), CQUEUE_UNDERFLOW);
+    EXPECT_EQ(queue_pop_begin(queue, &ptr), CQUEUE_UNDERFLOW);
 
     queue_destroy(queue);
 }
 
 TEST(EmptyQueue, popUnderflowDoesNotChangeValueOfArgument)
 {
-    cqueue_t* queue = NULL;
-    char ch = 'a';
+    cqueue_t* queue = nullptr;
+    void* ptr = nullptr;
 
     queue = queue_create(3);
 
-    ASSERT_EQ(queue_pop_begin(queue, &ch), CQUEUE_UNDERFLOW);
-    EXPECT_EQ(ch, 'a');
+    ASSERT_EQ(queue_pop_begin(queue, &ptr), CQUEUE_UNDERFLOW);
+    EXPECT_EQ(ptr, nullptr);
 
     queue_destroy(queue);
 }
 
 TEST(ReuseAfterUnderflow, pushPop)
 {
-    cqueue_t* queue = NULL;
+    cqueue_t* queue = nullptr;
     int val = 101;
-    int* ptr;
+    void* ptr;
 
     queue = queue_create(3);
 
@@ -129,25 +130,25 @@ TEST(ReuseAfterUnderflow, pushPop)
 
 TEST(EmptyQueue, peekReturnsUnderflow)
 {
-    cqueue_t* queue = NULL;
-    int *ptr;
+    cqueue_t* queue = nullptr;
+    void*ptr;
 
     queue = queue_create(3);
 
-    EXPECT_EQ(queue_peek(queue, &ptr), CQUEUE_UNDERFLOW);
+    EXPECT_EQ(queue_peek_begin(queue, &ptr), CQUEUE_UNDERFLOW);
 
     queue_destroy(queue);
 }
 
 TEST(EmptyQueue, peekUnderflowDoesNotChangeValueOfArgument)
 {
-    cqueue_t* queue = NULL;
+    cqueue_t* queue = nullptr;
     int val = 101;
-    int* ptr = &val;
+    void* ptr = &val;
 
     queue = queue_create(3);
 
-    ASSERT_EQ(queue_peek(queue, &ptr), CQUEUE_UNDERFLOW);
+    ASSERT_EQ(queue_peek_begin(queue, &ptr), CQUEUE_UNDERFLOW);
     EXPECT_EQ(ptr, &val);
 
     queue_destroy(queue);
@@ -155,9 +156,9 @@ TEST(EmptyQueue, peekUnderflowDoesNotChangeValueOfArgument)
 
 TEST(Circulation, queue_capacity_1)
 {
-    cqueue_t* queue = NULL;
+    cqueue_t* queue = nullptr;
     int val = 101;
-    int* ptr;
+    void* ptr;
     
     queue = queue_create(1);
 
@@ -174,9 +175,9 @@ TEST(Circulation, queue_capacity_1)
 
 TEST(Circulation, queue_capacity_2)
 {
-    cqueue_t* queue = NULL;
+    cqueue_t* queue = nullptr;
     int val = 101;
-    int* ptr;
+    void* ptr;
 
     queue = queue_create(2);
 
@@ -197,9 +198,9 @@ TEST(Circulation, queue_capacity_2)
 
 TEST(Circulation, queue_capacity_3)
 {
-    cqueue_t* queue = NULL;
+    cqueue_t* queue = nullptr;
     int val = 101;
-    int* ptr;
+    void* ptr;
 
     queue = queue_create(3);
 
@@ -223,12 +224,12 @@ TEST(Circulation, queue_capacity_3)
 
 TEST(Circulation, queue_capacity_4)
 {
-    cqueue_t* queue = NULL;
+    cqueue_t* queue = nullptr;
     int val_i = 101;
-    int* ptr_i;
+    void* ptr_i;
 
     double val_d = 101.5;
-    double* ptr_d;
+    void* ptr_d;
 
     queue = queue_create(4);
 
@@ -240,23 +241,23 @@ TEST(Circulation, queue_capacity_4)
     ASSERT_EQ(queue_pop_begin(queue, &ptr_i), CQUEUE_SUCCESS);
     ASSERT_EQ(&val_i, ptr_i);
 
-    EXPECT_EQ(queue_push_end(queue, val_i), CQUEUE_SUCCESS);
+    EXPECT_EQ(queue_push_end(queue, &val_i), CQUEUE_SUCCESS);
 
     EXPECT_EQ(queue_pop_begin(queue, &ptr_d), CQUEUE_SUCCESS);
     ASSERT_EQ(&val_d, ptr_d);
     EXPECT_EQ(queue_pop_begin(queue, &ptr_i), CQUEUE_SUCCESS);
-    ASSERT_EQ(val_i, ptr_i);
+    ASSERT_EQ(&val_i, ptr_i);
     EXPECT_EQ(queue_pop_begin(queue, &ptr_d), CQUEUE_SUCCESS);
-    ASSERT_EQ(val_d, ptr_d);
+    ASSERT_EQ(&val_d, ptr_d);
     EXPECT_EQ(queue_pop_begin(queue, &ptr_i), CQUEUE_SUCCESS);
-    EXPECT_EQ(val_i, ptr_i);
+    EXPECT_EQ(&val_i, ptr_i);
 
     queue_destroy(queue);
 }
 
 
 TEST(isFull, EmptyQueueCapacity1) {
-    cqueue_t* queue = NULL;
+    cqueue_t* queue = nullptr;
 
     queue = queue_create(1);
     EXPECT_EQ(queue_is_full(queue), CQUEUE_NOT_FULL);
@@ -265,9 +266,9 @@ TEST(isFull, EmptyQueueCapacity1) {
 }
 
 TEST(isFull, FullQueueCapacity1) {
-    cqueue_t* queue = NULL;
+    cqueue_t* queue = nullptr;
     int var = 101;
-    int* ptr;
+    void* ptr;
 
     queue = queue_create(1);
 
@@ -280,7 +281,7 @@ TEST(isFull, FullQueueCapacity1) {
 }
 
 TEST(isFull, EmptyQueue) {
-    cqueue_t* queue = NULL;
+    cqueue_t* queue = nullptr;
 
     queue = queue_create(5);
 
@@ -290,7 +291,7 @@ TEST(isFull, EmptyQueue) {
 }
 
 TEST(isFull, HalfFullQueue) {
-    cqueue_t* queue = NULL;
+    cqueue_t* queue = nullptr;
     double val = 5.55;
 
     queue = queue_create(5);
@@ -305,7 +306,7 @@ TEST(isFull, HalfFullQueue) {
 }
 
 TEST(isFull, FullQueue) {
-    cqueue_t* queue = NULL;
+    cqueue_t* queue = nullptr;
     char ch = 'a';
 
     queue = queue_create(5);
@@ -322,7 +323,7 @@ TEST(isFull, FullQueue) {
 }
 
 TEST(isEmpty, EmptyQueueCapacity1) {
-    cqueue_t* queue = NULL;
+    cqueue_t* queue = nullptr;
 
     queue = queue_create(1);
     EXPECT_EQ(queue_is_empty(queue), CQUEUE_EMPTY);
@@ -331,9 +332,9 @@ TEST(isEmpty, EmptyQueueCapacity1) {
 }
 
 TEST(isEmpty, FullQueueCapacity1) {
-    cqueue_t* queue = NULL;
+    cqueue_t* queue = nullptr;
     int var = 101;
-    int* ptr;
+    void* ptr;
 
     queue = queue_create(1);
 
@@ -346,7 +347,7 @@ TEST(isEmpty, FullQueueCapacity1) {
 }
 
 TEST(isEmpty, EmptyQueue) {
-    cqueue_t* queue = NULL;
+    cqueue_t* queue = nullptr;
 
     queue = queue_create(5);
 
@@ -356,7 +357,7 @@ TEST(isEmpty, EmptyQueue) {
 }
 
 TEST(isEmpty, HalfFullQueue) {
-    cqueue_t* queue = NULL;
+    cqueue_t* queue = nullptr;
     int val = 101;
 
     queue = queue_create(5);
@@ -371,7 +372,7 @@ TEST(isEmpty, HalfFullQueue) {
 }
 
 TEST(isEmpty, FullQueue) {
-    cqueue_t* queue = NULL;
+    cqueue_t* queue = nullptr;
     int val = 101;
 
     queue = queue_create(5);
@@ -388,9 +389,9 @@ TEST(isEmpty, FullQueue) {
 }
 
 TEST(FullQueue, PopEnd) {
-    cqueue_t* queue = NULL;
+    cqueue_t* queue = nullptr;
     int val = 101;
-    int* ptr;
+    void* ptr;
 
     queue = queue_create(5);
 
@@ -401,25 +402,26 @@ TEST(FullQueue, PopEnd) {
     ASSERT_EQ(queue_push_end(queue, &val + 4), CQUEUE_SUCCESS);
 
     EXPECT_EQ(queue_pop_end(queue, &ptr), CQUEUE_SUCCESS);
-    EXPECT_EQ(&ptr, &val + 4);
+    EXPECT_EQ(ptr, &val + 4);
     EXPECT_EQ(queue_pop_end(queue, &ptr), CQUEUE_SUCCESS);
-    EXPECT_EQ(&ptr, &val + 3);
+    EXPECT_EQ(ptr, &val + 3);
     EXPECT_EQ(queue_pop_end(queue, &ptr), CQUEUE_SUCCESS);
-    EXPECT_EQ(&ptr, &val + 2);
+    EXPECT_EQ(ptr, &val + 2);
     EXPECT_EQ(queue_pop_end(queue, &ptr), CQUEUE_SUCCESS);
-    EXPECT_EQ(&ptr, &val + 1);
+    EXPECT_EQ(ptr, &val + 1);
     EXPECT_EQ(queue_pop_end(queue, &ptr), CQUEUE_SUCCESS);
-    EXPECT_EQ(&ptr, &val + 0);
+    EXPECT_EQ(ptr, &val + 0);
 
     EXPECT_EQ(queue_pop_end(queue, &ptr), CQUEUE_UNDERFLOW);
-    EXPECT_EQ(&ptr, &val + 0);
+    EXPECT_EQ(ptr, &val + 0);
 
     queue_destroy(queue);
 }
 
 TEST(OverflowQueue, PopEnd) {
-    cqueue_t* queue = NULL;
+    cqueue_t* queue = nullptr;
     int val;
+    void* ptr;
 
     queue = queue_create(3);
 
@@ -429,35 +431,35 @@ TEST(OverflowQueue, PopEnd) {
     ASSERT_EQ(queue_push_end(queue, &val + 3), CQUEUE_OVERFLOW);
 
     EXPECT_EQ(queue_pop_end(queue, &ptr), CQUEUE_SUCCESS);
-    EXPECT_EQ(&ptr, &val + 3);
+    EXPECT_EQ(ptr, &val + 3);
     EXPECT_EQ(queue_pop_end(queue, &ptr), CQUEUE_SUCCESS);
-    EXPECT_EQ(&ptr, &val + 2);
+    EXPECT_EQ(ptr, &val + 2);
     EXPECT_EQ(queue_pop_end(queue, &ptr), CQUEUE_SUCCESS);
-    EXPECT_EQ(&ptr, &val + 1);
+    EXPECT_EQ(ptr, &val + 1);
     EXPECT_EQ(queue_pop_end(queue, &ptr), CQUEUE_UNDERFLOW);
-    EXPECT_EQ(&ptr, &val + 1);
+    EXPECT_EQ(ptr, &val + 1);
 
     queue_destroy(queue);
 }
 
 TEST(EmptyQueue, pushBegin) {
-    cqueue_t* queue = NULL;
+    cqueue_t* queue = nullptr;
     int val;
-    int* ptr;
+    void* ptr;
 
     queue = queue_create(3);
 
     EXPECT_EQ(queue_push_begin(queue, &val), CQUEUE_SUCCESS);
-    EXPECT_EQ(queue_peek(queue, &ptr), CQUEUE_SUCCESS);
+    EXPECT_EQ(queue_peek_begin(queue, &ptr), CQUEUE_SUCCESS);
     EXPECT_EQ(queue_pop_begin(queue, &ptr), CQUEUE_SUCCESS);
 
     queue_destroy(queue);
 }
 
 TEST(FullQueue, pushBegin) {
-    cqueue_t* queue = NULL;
+    cqueue_t* queue = nullptr;
     int val;
-    int* ptr;
+    void* ptr;
 
     queue = queue_create(3);
 
@@ -466,15 +468,15 @@ TEST(FullQueue, pushBegin) {
     ASSERT_EQ(queue_push_end(queue, &val + 2), CQUEUE_SUCCESS);
     EXPECT_EQ(queue_push_begin(queue, &val + 3), CQUEUE_OVERFLOW);
     EXPECT_EQ(queue_pop_begin(queue, &ptr), CQUEUE_SUCCESS);
-    EXPECT_EQ(&val + 0, ptr);
+    EXPECT_EQ(&val + 3, ptr);
 
     queue_destroy(queue);
 }
 
 
 TEST(EmptyQueue, popEnd) {
-    cqueue_t* queue = NULL;
-    int* ptr;
+    cqueue_t* queue = nullptr;
+    void* ptr;
 
     queue = queue_create(5);
 
@@ -484,9 +486,9 @@ TEST(EmptyQueue, popEnd) {
 }
 
 TEST(FullQueue, popEnd) {
-    cqueue_t* queue = NULL;
+    cqueue_t* queue = nullptr;
     int val;
-    int* ptr;
+    void* ptr;
 
     queue = queue_create(3);
 
@@ -496,7 +498,7 @@ TEST(FullQueue, popEnd) {
 
     EXPECT_EQ(queue_push_begin(queue, &val + 3), CQUEUE_OVERFLOW);
     EXPECT_EQ(queue_pop_end(queue, &ptr), CQUEUE_SUCCESS);
-    EXPECT_EQ(&val + 1, ptr);
+    EXPECT_EQ(&val + 1, (int *) ptr);
 
     queue_destroy(queue);
 }
