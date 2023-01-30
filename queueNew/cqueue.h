@@ -5,6 +5,8 @@
 #include <stdlib.h>
 #include <stdbool.h>
 
+#define DEBUG 0
+
 typedef struct cqueue_s cqueue_t;
 
 typedef enum cqueue_ret_e
