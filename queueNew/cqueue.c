@@ -1,5 +1,9 @@
 #include "cqueue.h"
-//wrap fprintf messages into MACROS
+
+#define DEBUG 0
+#define debug_print(fmt, ...) \
+            do { if (DEBUG == 1) fprintf(stderr, fmt, __VA_ARGS__); } while (0)
+
 static inline size_t queue_next_index(const size_t index, const size_t capacity) {
     return (index + 1) % (capacity + 1);
 }
@@ -25,7 +29,9 @@ cqueue_t* queue_create(const size_t capacity)
 {
     cqueue_t* cqueue = malloc(sizeof(*cqueue) + (capacity + 1) * sizeof(cqueue->element[0]));
     if (cqueue == NULL) {
-        fprintf(stderr, "Not enough memory for capacity: %zd", capacity);
+        #if (DEBUG == 1)
+            debug_print("Not enough memory for capacity: %zd\n", capacity);
+        #endif
         return NULL;
     }
     cqueue->capacity = capacity;
@@ -37,7 +43,9 @@ cqueue_t* queue_create(const size_t capacity)
 cqueue_ret_t queue_destroy(cqueue_t* cqueue)
 {
     if (cqueue == NULL) {
-        fprintf(stderr, "Queue does not exist");
+        #if (DEBUG == 1)
+            debug_print("Not valid queue\n");
+        #endif
         return CQUEUE_FAILURE;
     }
     free(cqueue);
@@ -46,7 +54,9 @@ cqueue_ret_t queue_destroy(cqueue_t* cqueue)
 cqueue_ret_t queue_push_end(cqueue_t* cqueue, void* element)
 {   
     if (cqueue == NULL) {
-        fprintf(stderr, "Queue does not exist");
+        #if (DEBUG == 1)
+            debug_print("Queue does not exist\n");
+        #endif
         return CQUEUE_FAILURE;
     }
 
@@ -62,7 +72,9 @@ cqueue_ret_t queue_push_end(cqueue_t* cqueue, void* element)
 
 cqueue_ret_t queue_push_begin(cqueue_t* cqueue, void* element) {
     if (cqueue == NULL) {
-        fprintf(stderr, "Queue does not exist");
+        #if (DEBUG == 1)
+            debug_print("Queue does not exist\n");
+        #endif
         return CQUEUE_FAILURE;
     }
 
@@ -78,7 +90,9 @@ cqueue_ret_t queue_push_begin(cqueue_t* cqueue, void* element) {
 
 cqueue_ret_t queue_pop_begin(cqueue_t* cqueue, void** p_element) {
     if (cqueue == NULL) {
-        fprintf(stderr, "argument is null");
+        #if (DEBUG == 1)
+            debug_print("Queue does not exist\n");
+        #endif
         return CQUEUE_FAILURE;
     }
 
@@ -93,7 +107,9 @@ cqueue_ret_t queue_pop_begin(cqueue_t* cqueue, void** p_element) {
 
 cqueue_ret_t queue_pop_end(cqueue_t* cqueue, void** p_element) {
     if (cqueue == NULL) {
-        fprintf(stderr, "argument is null");
+        #if (DEBUG == 1)
+            debug_print("Queue does not exist\n");
+        #endif
         return CQUEUE_FAILURE;
     }
 
@@ -108,7 +124,9 @@ cqueue_ret_t queue_pop_end(cqueue_t* cqueue, void** p_element) {
 
 cqueue_ret_t queue_peek_begin(const cqueue_t* cqueue, void** p_element) {
     if (cqueue == NULL) {
-        fprintf(stderr, "argument is null");
+        #if (DEBUG == 1)
+            debug_print("Queue does not exist\n");
+        #endif
         return CQUEUE_FAILURE;
     }
 
@@ -122,7 +140,9 @@ cqueue_ret_t queue_peek_begin(const cqueue_t* cqueue, void** p_element) {
 
 cqueue_ret_t queue_peek_end(const cqueue_t* cqueue, void** p_element) {
     if (cqueue == NULL) {
-        fprintf(stderr, "argument is null");
+        #if (DEBUG == 1)
+            debug_print("Queue does not exist\n");
+        #endif
         return CQUEUE_FAILURE;
     }
 
@@ -136,7 +156,9 @@ cqueue_ret_t queue_peek_end(const cqueue_t* cqueue, void** p_element) {
 
 cqueue_ret_t queue_is_full(const cqueue_t* cqueue) {
     if (cqueue == NULL) {
-        fprintf(stderr, "Queue does not exist");
+        #if (DEBUG == 1)
+            debug_print("Queue does not exist\n");
+        #endif
         return CQUEUE_FAILURE;
     }
 
@@ -145,7 +167,9 @@ cqueue_ret_t queue_is_full(const cqueue_t* cqueue) {
 
 cqueue_ret_t queue_is_empty(const cqueue_t* cqueue) {
     if (cqueue == NULL) {
-        fprintf(stderr, "Queue does not exist");
+        #if (DEBUG == 1)
+            debug_print("Queue does not exist\n");
+        #endif
         return CQUEUE_FAILURE;
     }
 
