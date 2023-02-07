@@ -7,12 +7,14 @@
 #define debug_print(fmt, ...)
 #endif
 
-#define CHECK_AND_RETURN_IF_NOT_EXIST(cqueue)  \
-    if (cqueue == NULL)                        \
-    {                                          \
-        debug_print("Queue does not exist\n"); \
-        return CQUEUE_FAILURE;                 \
-    }
+#define CHECK_AND_RETURN_IF_NOT_EXIST(argument)         \
+    do{                                                 \
+        if (argument == NULL)                           \
+        {                                               \
+            debug_print("Argument does not exist\n");   \
+            return CQUEUE_FAILURE;                      \
+        }                                               \
+    }while(0)
 
 static inline size_t queue_next_index(const size_t index, const size_t capacity)
 {
@@ -50,6 +52,7 @@ cqueue_ret_t queue_destroy(cqueue_t* cqueue)
 {
     CHECK_AND_RETURN_IF_NOT_EXIST(cqueue);
     free(cqueue);
+    return CQUEUE_SUCCESS;
 }
 
 cqueue_ret_t queue_push_end(cqueue_t* cqueue, void* element)
@@ -85,6 +88,7 @@ cqueue_ret_t queue_push_begin(cqueue_t* cqueue, void* element)
 cqueue_ret_t queue_pop_begin(cqueue_t* cqueue, void** p_element)
 {
     CHECK_AND_RETURN_IF_NOT_EXIST(cqueue);
+    CHECK_AND_RETURN_IF_NOT_EXIST(p_element);
 
     if (cqueue->begin == cqueue->end)
     {
@@ -99,6 +103,7 @@ cqueue_ret_t queue_pop_begin(cqueue_t* cqueue, void** p_element)
 cqueue_ret_t queue_pop_end(cqueue_t* cqueue, void** p_element)
 {
     CHECK_AND_RETURN_IF_NOT_EXIST(cqueue);
+    CHECK_AND_RETURN_IF_NOT_EXIST(p_element);
 
     if (cqueue->begin == cqueue->end)
     {
@@ -113,6 +118,7 @@ cqueue_ret_t queue_pop_end(cqueue_t* cqueue, void** p_element)
 cqueue_ret_t queue_peek_begin(const cqueue_t* cqueue, void** p_element)
 {
     CHECK_AND_RETURN_IF_NOT_EXIST(cqueue);
+    CHECK_AND_RETURN_IF_NOT_EXIST(p_element);
 
     if (cqueue->begin == cqueue->end)
     {
@@ -126,6 +132,7 @@ cqueue_ret_t queue_peek_begin(const cqueue_t* cqueue, void** p_element)
 cqueue_ret_t queue_peek_end(const cqueue_t* cqueue, void** p_element)
 {
     CHECK_AND_RETURN_IF_NOT_EXIST(cqueue);
+    CHECK_AND_RETURN_IF_NOT_EXIST(p_element);
 
     if (cqueue->begin == cqueue->end)
     {
