@@ -71,5 +71,10 @@ cqueue_ret_t queue_peek_end(const cqueue_t* cqueue, void** p_element);
  */
 cqueue_ret_t queue_status(const cqueue_t* cqueue);
 
+/*
+* Returns CQUEUE_FAILURE if queue does not exists, CQUEUE_SUCCESS otherwise
+*/
+cqueue_ret_t queue_get_capacity(const cqueue_t* cqueue);
+
 #endif
 

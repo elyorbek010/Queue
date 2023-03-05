@@ -160,3 +160,12 @@ cqueue_ret_t queue_status(const cqueue_t* cqueue)
         return CQUEUE_NONEMPTY;
     }
 }
+
+cqueue_ret_t queue_get_capacity(const cqueue_t* cqueue, size_t* capacity) {
+    if (cqueue == NULL) {
+        return CQUEUE_FAILURE;
+    }
+
+    *capacity = cqueue->capacity;
+    return CQUEUE_SUCCESS;
+}
